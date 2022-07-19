@@ -21,8 +21,12 @@ public class Cliente : MonoBehaviour
     private bool rodando = false;
     [Header("Setup")]
     [SerializeField]
+    private Peca[] pecas;
+    [SerializeField]
     private Text text;
     private string dados;
+
+    public int id = -1;
 
     private void OnApplicationQuit()
     {
@@ -45,6 +49,27 @@ public class Cliente : MonoBehaviour
         reader = new StreamReader(stream);
         //Objeto responsável em enviar mensagens
         writer = new StreamWriter(stream);
+
+
+        dados = reader.ReadLine();
+        //jogador:0
+        try
+        {
+            string[] idDados = dados.Split(":");
+            if (idDados.Length == 2)
+            {
+                //idDados[0] = jogador
+                //idDados[1] = 0
+                id = int.Parse(idDados[1]);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            id = -1;
+        }
+
+
         while (rodando)
         {
             try
@@ -62,13 +87,20 @@ public class Cliente : MonoBehaviour
     {
         try
         {
+            //Essa linha para a execução do código enquanto não chega nenhuma mensagem 
             dados = reader.ReadLine();
             while (dados != null)
             {
+                for (int i = 0; i < pecas.Length; i++)
+                {
+                    if (pecas[i].UseDados(dados))
+                    {
+                        break;
+                    }
+                }
+
                 dados = reader.ReadLine();
             }
-
-
         }
         catch (Exception e)
         {
@@ -106,6 +138,7 @@ public class Cliente : MonoBehaviour
 
     public void EnviarMensagem(string msg)
     {
+        if (writer == null) return;
         try
         {
             writer.WriteLine(msg);
