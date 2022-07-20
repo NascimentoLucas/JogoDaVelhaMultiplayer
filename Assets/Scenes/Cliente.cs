@@ -25,6 +25,7 @@ public class Cliente : MonoBehaviour
     [SerializeField]
     private Text text;
     private string dados;
+    private string msg;
 
     public int id = -1;
 
@@ -47,7 +48,7 @@ public class Cliente : MonoBehaviour
 
     private void Update()
     {
-        text.text = dados;
+        text.text = msg;
     }
 
     private void MetodoDaThread()
@@ -110,6 +111,10 @@ public class Cliente : MonoBehaviour
                     }
                 }
 
+                if (!string.IsNullOrEmpty(dados))
+                {
+                    msg = dados;
+                }
                 dados = reader.ReadLine();
             }
         }
