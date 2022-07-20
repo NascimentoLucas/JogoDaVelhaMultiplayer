@@ -5,24 +5,21 @@ using UnityEngine;
 public class Peca : MonoBehaviour
 {
     [Header("Setup")]
-    [SerializeField]
-    Cliente cliente;
+    public Cliente cliente;
     [SerializeField]
     SpriteRenderer local;
     [SerializeField]
     SpriteRenderer oponente;
 
     [Header("Rede")]
-    [SerializeField]
-    private int playerId = -1;
-    [SerializeField]
-    private int pecaId = -1;
+    public int pecaId = -1;
 
     private Vector3 oponentePos;
 
 
     private void Update()
     {
+
         string msg = "p;" + pecaId;
         msg += ";" + local.transform.position.x;
         msg += ";" + local.transform.position.y;
@@ -35,7 +32,7 @@ public class Peca : MonoBehaviour
     {
         if (!dados[0].Equals('p')) return false;
 
-        string[] pos  = dados.Split(';');
+        string[] pos = dados.Split(';');
         //p;-1;0;0;0
         //pos[0] = p
         //pos[1] = -1
@@ -45,14 +42,17 @@ public class Peca : MonoBehaviour
 
         try
         {
+            if (!pos[1].Equals(pecaId.ToString()))
+                return false;
+
             oponentePos.x = float.Parse(pos[2]);
             oponentePos.y = float.Parse(pos[3]);
             oponentePos.z = float.Parse(pos[4]);
-            Debug.Log(dados);
         }
         catch (System.Exception e)
         {
             Debug.Log(e);
+            return false;
         }
 
         return true;

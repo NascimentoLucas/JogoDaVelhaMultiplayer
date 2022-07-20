@@ -35,6 +35,16 @@ public class Cliente : MonoBehaviour
         Sair();
     }
 
+    private void Start()
+    {
+        pecas = FindObjectsOfType<Peca>();
+
+        for (int i = 0; i < pecas.Length; i++)
+        {
+            pecas[i].pecaId = i + 1;
+        }
+    }
+
     private void Update()
     {
         text.text = dados;
@@ -95,6 +105,7 @@ public class Cliente : MonoBehaviour
                 {
                     if (pecas[i].UseDados(dados))
                     {
+                        dados = "";
                         break;
                     }
                 }
